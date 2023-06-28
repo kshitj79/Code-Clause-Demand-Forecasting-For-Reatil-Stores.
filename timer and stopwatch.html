@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Timer And Stopwatch</title>
+</head>
+<style>
+  *{
+box-sizing: border-box;
+padding: 0;
+margin: 0;
+}
+
+html, body{
+height: 100%;
+}
+
+body{
+
+background-color: #0045d6;
+font-family: 'Poppins', sans-serif;
+
+}
+
+header{
+width: 100%;
+height: 13vh;
+display: flex;
+justify-content: center;
+align-items: center;
+background-color: #fff;
+}
+
+.title{
+color: #0045d6;
+}
+
+.content{
+
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+color: #fff;
+font-size: 3rem;
+text-transform: uppercase;
+}
+
+.btn{
+padding: 0.8rem 1.7rem;
+background-color: #fff;
+border: none;
+outline: none;
+cursor: pointer;
+border-radius: 4px;
+font-family: 'Poppins', sans-serif;
+font-size: 1.2rem;
+font-weight: 700;
+}
+
+.start{
+color: #1f3;
+}
+.stop{
+color: #E00;
+}
+
+#continue, .stop, #start{
+display: none;
+}
+
+
+#seconds{
+width: 250px;
+background: none;
+outline: none;
+border: none;
+border-bottom: 4px solid #fff;
+padding: 1rem;
+font-size: 2rem;
+color: white;
+}
+
+#seconds::placeholder{
+color: #ddd;
+}
+ .stopwatch {
+        text-align: center;
+        margin-top: 200px;
+      }
+      
+       .stopwatch h1 {
+        font-size: 24px;
+      }
+      
+     .stopwatch p {
+        font-size: 48px;
+        font-weight: bold;
+        margin: 10px;
+      }
+      
+      button {
+        font-size: 16px;
+        padding: 8px 16px;
+        margin: 5px;
+      }
+</style>
+<body>
+    <header>
+    	<h1 class="title">Timer And Stopwatch</h1>
+    </header>
+    <div class="content">
+    	<div class="counter"></div>
+    	<input id="seconds" type="number" placeholder="Seconds...">
+    	<div class="buttons">
+    		<button class="btn start" id="start" value="1" onclick="check(this)">Start</button>
+    		<button class="btn start" id="continue" value="1" onclick="check(this)">Continue</button>
+    		<button class="btn stop" id="stop" value="0" onclick="check(this)">Stop</button>
+    		<button class="btn start" id="submit" onclick="subm()">Submit</button>
+    	</div>
+      <div class="stopwatch">
+      
+        <p id="stopwatch">00:00:00</p>
+        <button id="startStopwatch">Start</button>
+        <button id="pauseStopwatch">Pause</button>
+        <button id="resetStopwatch">Reset</button>
+      </div>
+    <script >
+      const counter = document.querySelector('.counter');
+const btn = document.querySelector('.buttons');
+const secondsInput = document.getElementById('seconds');
+
+var seconds;
+var minuts;
+var remseconds;
+var toCount;
+
+function subm(){
+    display("submit", "start");
+    seconds = Number(secondsInput.value);
+    secondsInput.style.display = "none";
+    counting();
+}
+
+function display(first, second){
+	document.getElementById(first).style.display = "none";
+	document.getElementById(second).style.display = "block";
+}
+
+function check(stat){
+	toCount = stat.value;
+	if(stat.id == "start"){
+		display("start", "stop");
+	}
+	else if(stat.id == "stop"){
+		display("stop", "continue");
+	}
+	else{
+		display('continue', "stop");
+	}
+}
+
+function count(){
+	if(seconds > 0){
+       if(toCount == true){
+            seconds--;
+            remseconds = seconds % 60;
+            minuts = Math.floor(seconds / 60);
+
+            if(remseconds < 10){
+       	        remseconds = "0" + remseconds;
+            }
+
+            if(minuts < 10){
+       	        minuts = "0" + minuts;
+            }
+
+            counter.innerHTML = minuts + " : " + remseconds;
+       }
+	}
+	else{
+		counter.innerHTML = "Done!";
+		btn.style.opacity = '0';
+	}
+}
+
+function counting(){
+	remseconds = seconds % 60;
+minuts = Math.floor(seconds / 60);
+
+if(remseconds < 10){
+    remseconds = "0" + remseconds;
+}
+
+if(minuts < 10){
+    minuts = "0" + minuts;
+}
+
+counter.innerHTML = minuts + " : " + remseconds;
+   setInterval(count, 1000);
+}
+let stopwatchId;
+let stopwatchRunning = false;
+let stopwatchCount = 0;
+
+function startStopwatch() {
+  if (!stopwatchRunning) {
+    stopwatchId = setInterval(updateStopwatch, 1000);
+    stopwatchRunning = true;
+  }
+}
+
+function pauseStopwatch() {
+  clearInterval(stopwatchId);
+  stopwatchRunning = false;
+}
+
+function resetStopwatch() {
+  clearInterval(stopwatchId);
+  stopwatchRunning = false;
+  stopwatchCount = 0;
+  document.getElementById('stopwatch').textContent = formatTime(stopwatchCount);
+}
+
+function updateStopwatch() {
+  stopwatchCount++;
+  document.getElementById('stopwatch').textContent = formatTime(stopwatchCount);
+}
+
+function formatTime(time) {
+  let hours = Math.floor(time / 3600);
+  let minutes = Math.floor((time % 3600) / 60);
+  let seconds = time % 60;
+
+  return `${padZero(hours)}:${padZero(minutes)}:${padZero(seconds)}`;
+}
+
+function padZero(number) {
+  return number.toString().padStart(2, '0');
+}
+
+document.getElementById('startStopwatch').addEventListener('click', startStopwatch);
+document.getElementById('pauseStopwatch').addEventListener('click', pauseStopwatch);
+document.getElementById('resetStopwatch').addEventListener('click', resetStopwatch);
+
+
+    </script>
+</body>
+</html>
